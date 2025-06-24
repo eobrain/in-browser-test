@@ -1,3 +1,4 @@
+// import { test, describe, it, assert } from 'https://cdn.jsdelivr.net/gh/eobrain/in-browser-test/index.min.js'
 import { test, describe, it, assert } from '../index.js'
 import { setImmediate } from './example.js'
 
