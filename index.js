@@ -19,20 +19,19 @@ export const describe = (name, fn) => {
 }
 
 export const test = async (description, fn) => {
-  const t = { test }
-
   const $parent = $suite
   try {
-    const y = fn(t)
+    const y = fn()
     if (isPromise(y)) {
       await y
     }
-    addLi($parent, `✔️ ${where()}It ${description}`)
+    addLi($parent, `✔️ ${where()}${description}`)
   } catch (error) {
-    addLi($parent, `❌ ${where()}It ${description} - ${error.message}`)
+    addLi($parent, `❌ ${where()}${description} - ${error.message}`)
   }
 }
-export const it = test
+
+export const it = async (description, fn) => test('It ' + description, fn)
 
 export const assert = (condition, message) => {
   if (!condition) {
