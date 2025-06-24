@@ -14,13 +14,16 @@ export const describe = (name, fn) => {
   const describeId = `d${Math.random()}`
   addLi($testLog, `${name}<ul id="${describeId}"></ul>`)
   $suite = document.getElementById(describeId)
+  fn.$parent = $suite
   fn()
 }
 
 export const test = async (description, fn) => {
+  const t = { test }
+
   const $parent = $suite
   try {
-    const y = fn()
+    const y = fn(t)
     if (isPromise(y)) {
       await y
     }
@@ -40,14 +43,17 @@ export const assert = (condition, message) => {
 assert.strictEqual = (actual, expected, message) => {
   const prefix = message ? `${message}: ` : ''
   if (actual !== expected) {
-    throw new Error(`${prefix}Expected ${expected}, but got ${actual} (${where()})`)
+    throw new Error(
+      `${prefix}Expected ${expected}, but got ${actual} (${where()})`
+    )
   }
 }
 
 const where = () => {
-  const stack = (new Error()).stack.split('\n')
+  const stack = new Error().stack.split('\n')
   return (stack.length >= 4 ? stack[3] : '')
-    .replace(/\s*at /, '').replace(/.*\/([^/]+)/, '$1 - ')
+    .replace(/\s*at /, '')
+    .replace(/.*\/([^/]+)/, '$1 - ')
 }
 
-const isPromise = x => Boolean(x && typeof x.then === 'function')
+const isPromise = (x) => Boolean(x && typeof x.then === 'function')

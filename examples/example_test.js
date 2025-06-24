@@ -1,6 +1,8 @@
 import { test, describe, it, assert } from '../index.js'
 import { setImmediate } from './example.js'
 
+// These examples are taken from https://nodejs.org/api/test.html#test-runner
+
 test('synchronous passing test', (t) => {
   // This test passes because it does not throw an exception.
   assert.strictEqual(1, 1)
@@ -43,6 +45,16 @@ test('callback failing test', (t, done) => {
   // the test fails.
   setImmediate(() => {
     done(new Error('callback failure'))
+  })
+})
+
+test('top level test', async (t) => {
+  t.test('subtest 1', (t) => {
+    assert.strictEqual(1, 1)
+  })
+
+  t.test('subtest 2', (t) => {
+    assert.strictEqual(2, 2)
   })
 })
 
